@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  webapp:
+    build:
+      context: web_app/
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./web_app/app:/app
+
+volumes:
+  webapp:
