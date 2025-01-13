@@ -1,7 +1,7 @@
 #syntax=docker/dockerfile:1
 
 # Versions
-FROM dunglas/frankenphp:1-php8.3 AS frankenphp_upstream
+FROM dunglas/frankenphp:1-php8.4 AS frankenphp_upstream
 
 # The different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
@@ -78,12 +78,12 @@ COPY --link frankenphp/conf.d/20-app.prod.ini $PHP_INI_DIR/app.conf.d/
 COPY --link frankenphp/worker.Caddyfile /etc/caddy/worker.Caddyfile
 
 # prevent the reinstallation of vendors at every changes in the source code
-COPY --link composer.* symfony.* ./
+COPY --link ./app/composer.* ./app/symfony.* ./
 RUN set -eux; \
 	composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
 
 # copy sources
-COPY --link . ./
+COPY --link ./app /app
 RUN rm -Rf frankenphp/
 
 RUN set -eux; \
