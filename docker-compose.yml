@@ -25,6 +25,7 @@ services:
       SYMFONY_VERSION: ${SYMFONY_VERSION:-6.4.*}
       STABILITY: ${STABILITY:-stable}
     volumes:
+      - ./back_app/app:/app
       - caddy_data:/data
       - caddy_config:/config
     ports:
