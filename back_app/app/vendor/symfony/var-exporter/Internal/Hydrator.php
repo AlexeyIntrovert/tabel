@@ -24,13 +24,19 @@ class Hydrator
     public static array $simpleHydrators = [];
     public static array $propertyScopes = [];
 
-    public function __construct(
-        public readonly Registry $registry,
-        public readonly ?Values $values,
-        public readonly array $properties,
-        public readonly mixed $value,
-        public readonly array $wakeups,
-    ) {
+    public $registry;
+    public $values;
+    public $properties;
+    public $value;
+    public $wakeups;
+
+    public function __construct(?Registry $registry, ?Values $values, array $properties, $value, array $wakeups)
+    {
+        $this->registry = $registry;
+        $this->values = $values;
+        $this->properties = $properties;
+        $this->value = $value;
+        $this->wakeups = $wakeups;
     }
 
     public static function hydrate($objects, $values, $properties, $value, $wakeups)
@@ -64,11 +70,11 @@ class Hydrator
                 return $baseHydrator;
 
             case 'ErrorException':
-                return $baseHydrator->bindTo(null, new class extends \ErrorException {
+                return $baseHydrator->bindTo(null, new class() extends \ErrorException {
                 });
 
             case 'TypeError':
-                return $baseHydrator->bindTo(null, new class extends \Error {
+                return $baseHydrator->bindTo(null, new class() extends \Error {
                 });
 
             case 'SplObjectStorage':
@@ -166,11 +172,11 @@ class Hydrator
                 return $baseHydrator;
 
             case 'ErrorException':
-                return $baseHydrator->bindTo(new \stdClass(), new class extends \ErrorException {
+                return $baseHydrator->bindTo(new \stdClass(), new class() extends \ErrorException {
                 });
 
             case 'TypeError':
-                return $baseHydrator->bindTo(new \stdClass(), new class extends \Error {
+                return $baseHydrator->bindTo(new \stdClass(), new class() extends \Error {
                 });
 
             case 'SplObjectStorage':
@@ -248,7 +254,10 @@ class Hydrator
         };
     }
 
-    public static function getPropertyScopes($class): array
+    /**
+     * @return array
+     */
+    public static function getPropertyScopes($class)
     {
         $propertyScopes = [];
         $r = new \ReflectionClass($class);
@@ -260,9 +269,9 @@ class Hydrator
                 continue;
             }
             $name = $property->name;
-            $readonlyScope = null;
 
             if (\ReflectionProperty::IS_PRIVATE & $flags) {
+                $readonlyScope = null;
                 if ($flags & \ReflectionProperty::IS_READONLY) {
                     $readonlyScope = $class;
                 }
@@ -270,6 +279,7 @@ class Hydrator
 
                 continue;
             }
+            $readonlyScope = null;
             if ($flags & \ReflectionProperty::IS_READONLY) {
                 $readonlyScope = $property->class;
             }

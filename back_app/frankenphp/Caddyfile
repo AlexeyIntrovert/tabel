@@ -11,6 +11,7 @@
 {$SERVER_NAME:localhost} {
 	log {
 		{$CADDY_SERVER_LOG_OPTIONS}
+		output stderr
 		# Redact the authorization query parameter that can be set by Mercure
 		format filter {
 			request>uri query {
@@ -23,17 +24,17 @@
 	encode zstd br gzip
 
 	mercure {
-		# Transport to use (default to Bolt)
+	#	# Transport to use (default to Bolt)
 		transport_url {$MERCURE_TRANSPORT_URL:bolt:///data/mercure.db}
-		# Publisher JWT key
+	#	# Publisher JWT key
 		publisher_jwt {env.MERCURE_PUBLISHER_JWT_KEY} {env.MERCURE_PUBLISHER_JWT_ALG}
-		# Subscriber JWT key
+	#	# Subscriber JWT key
 		subscriber_jwt {env.MERCURE_SUBSCRIBER_JWT_KEY} {env.MERCURE_SUBSCRIBER_JWT_ALG}
-		# Allow anonymous subscribers (double-check that it's what you want)
+	#	# Allow anonymous subscribers (double-check that it's what you want)
 		anonymous
-		# Enable the subscription API (double-check that it's what you want)
+	#	# Enable the subscription API (double-check that it's what you want)
 		subscriptions
-		# Extra directives
+	#	# Extra directives
 		{$MERCURE_EXTRA_DIRECTIVES}
 	}
 
@@ -45,7 +46,7 @@
 	header ?Permissions-Policy "browsing-topics=()"
 
 	@phpRoute {
-		not path /.well-known/mercure*
+		#not path /.well-known/mercure*
 		not file {path}
 	}
 	rewrite @phpRoute index.php
