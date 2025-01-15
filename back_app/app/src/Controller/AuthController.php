@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AuthController extends AbstractController
 {
-    #[Route('/', name: 'app_conference')]
+    #[Route('/', name: 'app_main')]
     public function index(): Response
     {
         $response = new Response();

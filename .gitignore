@@ -1,2 +1,4 @@
 /web_app/node_module/*
 /web_app/app/node_module/*
+pgadmin/*
+db/*
