@@ -76,7 +76,7 @@ services:
         protocol: tcp
       # OA HTTP
       - target: 8000
-        published: ${HTTP_PORT:-8000}
+        published: ${OA_HTTP_PORT:-8000}
         protocol: tcp
       # HTTPS
       - target: 443
