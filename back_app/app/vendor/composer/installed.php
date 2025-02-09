@@ -151,6 +151,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'nelmio/cors-bundle' => array(
+            'pretty_version' => '2.5.0',
+            'version' => '2.5.0.0',
+            'reference' => '3a526fe025cd20e04a6a11370cf5ab28dbb5a544',
+            'type' => 'symfony-bundle',
+            'install_path' => __DIR__ . '/../nelmio/cors-bundle',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'nikic/php-parser' => array(
             'pretty_version' => 'v5.4.0',
             'version' => '5.4.0.0',
