@@ -20,9 +20,9 @@ security:
             lazy: true
             provider: app_user_provider
             form_login:
-                login_path: app_login
-                check_path: app_login
-                default_target_path: app_home
+                login_path: app_need_auth
+                check_path: auth_check
+                default_target_path: app_main
             logout:
                 path: app_logout
                 target: app_login
@@ -39,7 +39,7 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         
-        - path: ^/login
+        - path: ^/auth
           roles: PUBLIC_ACCESS
         - path: ^/admin
           roles: ROLE_ADMIN
