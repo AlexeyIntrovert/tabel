@@ -5,43 +5,65 @@ namespace App\User\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\User\Repository\UserRepository")
- */
+#[ORM\Entity(repositoryClass: "App\User\Repository\UserRepository")]
+#[ORM\Table(name: "tabel_user")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
+    #[Assert\NotBlank(message: "Name should not be blank.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Name cannot be longer than {{ limit }} characters."
+    )]
     private $name;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $tab_num;
+    #[ORM\Column(type: "integer", options: ["default" => 0])]
+    #[Assert\NotBlank(message: "Tab number should not be blank.")]
+    #[Assert\Type(
+        type: "integer",
+        message: "Tab number must be an integer."
+    )]
+    private $tab_num = 0;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $gr_kod;
+    #[ORM\Column(type: "integer", options: ["default" => 0])]
+    #[Assert\NotBlank(message: "Group code should not be blank.")]
+    #[Assert\Type(
+        type: "integer",
+        message: "Group code must be an integer."
+    )]
+    private $gr_kod = 0;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
+    #[Assert\NotBlank(message: "Password should not be blank.")]
+    #[Assert\Length(
+        min: 8,
+        max: 255,
+        minMessage: "Password must be at least {{ limit }} characters long.",
+        maxMessage: "Password cannot be longer than {{ limit }} characters."
+    )]
     private $password;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: "json")]
+    #[Assert\NotNull(message: "Roles should not be null.")]
+    #[Assert\All([
+        new Assert\Type(
+            type: "string",
+            message: "Each role must be a string."
+        )
+    ])]
     private $roles = [];
+
+    #[ORM\Column(type: "string", length: 255, unique: true)]
+    #[Assert\NotBlank(message: "Email should not be blank.")]
+    #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
+    private $email;
 
     // Getters and Setters
     public function getId(): ?int
@@ -109,6 +131,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

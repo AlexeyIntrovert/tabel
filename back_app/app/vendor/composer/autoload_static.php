@@ -34,12 +34,14 @@ class ComposerStaticInit921a95a4a15ba8fe125c21c075485ccb
             'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
             'Symfony\\Flex\\' => 13,
+            'Symfony\\Contracts\\Translation\\' => 30,
             'Symfony\\Contracts\\Service\\' => 26,
             'Symfony\\Contracts\\EventDispatcher\\' => 34,
             'Symfony\\Contracts\\Cache\\' => 24,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\VarExporter\\' => 30,
             'Symfony\\Component\\VarDumper\\' => 28,
+            'Symfony\\Component\\Validator\\' => 28,
             'Symfony\\Component\\String\\' => 25,
             'Symfony\\Component\\Stopwatch\\' => 28,
             'Symfony\\Component\\Security\\Http\\' => 32,
@@ -93,6 +95,12 @@ class ComposerStaticInit921a95a4a15ba8fe125c21c075485ccb
             'Nelmio\\CorsBundle\\' => 18,
             'Nelmio\\ApiDocBundle\\' => 20,
         ),
+        'L' => 
+        array (
+            'Lexik\\Bundle\\JWTAuthenticationBundle\\' => 37,
+            'Lcobucci\\JWT\\' => 13,
+            'Lcobucci\\Clock\\' => 15,
+        ),
         'D' => 
         array (
             'Doctrine\\SqlFormatter\\' => 22,
@@ -120,9 +128,9 @@ class ComposerStaticInit921a95a4a15ba8fe125c21c075485ccb
     public static $prefixDirsPsr4 = array (
         'phpDocumentor\\Reflection\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -152,6 +160,10 @@ class ComposerStaticInit921a95a4a15ba8fe125c21c075485ccb
         array (
             0 => __DIR__ . '/..' . '/symfony/flex/src',
         ),
+        'Symfony\\Contracts\\Translation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/translation-contracts',
+        ),
         'Symfony\\Contracts\\Service\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
@@ -175,6 +187,10 @@ class ComposerStaticInit921a95a4a15ba8fe125c21c075485ccb
         'Symfony\\Component\\VarDumper\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
+        ),
+        'Symfony\\Component\\Validator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/validator',
         ),
         'Symfony\\Component\\String\\' => 
         array (
@@ -335,6 +351,18 @@ class ComposerStaticInit921a95a4a15ba8fe125c21c075485ccb
         'Nelmio\\ApiDocBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/nelmio/api-doc-bundle/src',
+        ),
+        'Lexik\\Bundle\\JWTAuthenticationBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lexik/jwt-authentication-bundle',
+        ),
+        'Lcobucci\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lcobucci/jwt/src',
+        ),
+        'Lcobucci\\Clock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lcobucci/clock/src',
         ),
         'Doctrine\\SqlFormatter\\' => 
         array (

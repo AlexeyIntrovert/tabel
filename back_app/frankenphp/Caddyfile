@@ -1,5 +1,7 @@
 {
 	{$CADDY_GLOBAL_OPTIONS}
+	auto_https off
+
 
 	frankenphp {
 		{$FRANKENPHP_CONFIG}
@@ -8,7 +10,7 @@
 
 {$CADDY_EXTRA_CONFIG}
 
-{$SERVER_NAME:localhost} {
+http://{$SERVER_NAME:localhost} {
 	log {
 		{$CADDY_SERVER_LOG_OPTIONS}
 		output stderr
