@@ -48,9 +48,6 @@ COPY --link frankenphp/conf.d/10-app.ini $PHP_INI_DIR/app.conf.d/
 COPY --link --chmod=755 frankenphp/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 COPY --link frankenphp/Caddyfile /etc/caddy/Caddyfile
 
-COPY --link config/jwt/private.pem /app/config/jwt/  
-COPY --link config/jwt/public.pem /app/config/jwt/
-
 
 ENTRYPOINT ["docker-entrypoint"]
 
