@@ -1,9 +1,9 @@
 <?php
 
-namespace App\User\Service;
+namespace App\Staff\User\Service;
 
-use App\User\Entity\User;
-use App\User\Repository\UserRepository;
+use App\Staff\User\Entity\User;
+use App\Staff\User\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UserService

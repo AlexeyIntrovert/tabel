@@ -10,10 +10,10 @@ security:
     providers:
         app_user_provider:
             entity:
-                class: App\User\Entity\User
+                class: App\Staff\User\Entity\User
                 property: name
         user_provider:
-            id: App\User\Provider\UserProvider
+            id: App\Staff\User\Provider\UserProvider
     firewalls:
         api:
             pattern: ^/api

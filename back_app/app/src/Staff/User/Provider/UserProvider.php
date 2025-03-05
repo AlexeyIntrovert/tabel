@@ -1,8 +1,8 @@
 <?php
 
-namespace App\User\Provider;
+namespace App\Staff\User\Provider;
 
-use App\User\Entity\User;
+use App\Staff\User\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;

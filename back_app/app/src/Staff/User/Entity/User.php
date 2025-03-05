@@ -1,13 +1,14 @@
 <?php
 
-namespace App\User\Entity;
+namespace App\Staff\User\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Staff\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: "App\User\Repository\UserRepository")]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: "tabel_user")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -68,6 +69,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "Email should not be blank.")]
     #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
     private $email;
+
+    #[ORM\Column(type: "string", length: 255)]
+    #[Assert\NotBlank(message: "Full name should not be blank.")]
+    private $fullName;
+
+    #[ORM\ManyToOne(targetEntity: Position::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private $position;
+
+    #[ORM\Column(type: "integer", nullable: true)]
+    private $grade;
+
+    #[ORM\ManyToOne(targetEntity: ProductionType::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private $productionType;
+
+    #[ORM\ManyToOne(targetEntity: Group::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private $group;
 
     // Getters and Setters
     public function getId(): ?int
@@ -148,6 +168,61 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->email = $email;
 
+        return $this;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->fullName;
+    }
+
+    public function setFullName(string $fullName): self
+    {
+        $this->fullName = $fullName;
+        return $this;
+    }
+
+    public function getPosition(): ?Position
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?Position $position): self
+    {
+        $this->position = $position;
+        return $this;
+    }
+
+    public function getGrade(): ?int
+    {
+        return $this->grade;
+    }
+
+    public function setGrade(?int $grade): self
+    {
+        $this->grade = $grade;
+        return $this;
+    }
+
+    public function getProductionType(): ?ProductionType
+    {
+        return $this->productionType;
+    }
+
+    public function setProductionType(?ProductionType $productionType): self
+    {
+        $this->productionType = $productionType;
+        return $this;
+    }
+
+    public function getGroup(): ?Group
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?Group $group): self
+    {
+        $this->group = $group;
         return $this;
     }
 

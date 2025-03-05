@@ -1,9 +1,9 @@
 <?php
 
-namespace App\User\Controller;
+namespace App\Staff\User\Controller;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Staff\Entity\User;
+use App\Staff\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -156,5 +156,50 @@ class UserController extends AbstractController
         ];
 
         return new JsonResponse($data, 200);
+    }
+
+    #[Route('/api/profile', name: 'get_user_profile', methods: ['GET'])]
+    public function getUserProfile(): JsonResponse
+    {
+        $user = $this->getUser();
+        
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return new JsonResponse([
+            'fullName' => $user->getFullName(),
+            'tabNum' => $user->getTabNum(),
+            'grKod' => $user->getGrKod(),
+            'productionType' => $user->getProductionType(),
+            'position' => $user->getPosition(),
+            'grade' => $user->getGrade()
+        ]);
+    }
+
+    #[Route('/api/profile', name: 'update_user_profile', methods: ['PUT'])]
+    public function updateUserProfile(Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+        $data = json_decode($request->getContent(), true);
+
+        if (isset($data['fullName'])) {
+            $user->setFullName($data['fullName']);
+        }
+        if (isset($data['position'])) {
+            $user->setPosition($data['position']);
+        }
+        if (isset($data['grade'])) {
+            $user->setGrade($data['grade']);
+        }
+        if (isset($data['productionType'])) {
+            $user->setProductionType($data['productionType']);
+        }
+
+        $this->entityManager->flush();
+
+        return new JsonResponse([
+            'message' => 'Profile updated successfully'
+        ]);
     }
 }
