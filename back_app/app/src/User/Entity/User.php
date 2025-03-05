@@ -50,6 +50,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private $password;
 
+    public const ROLE_USER = 'ROLE_USER';
+    public const ROLE_MANAGER = 'ROLE_MANAGER';
+    public const ROLE_HEADER = 'ROLE_HEADER';
+
     #[ORM\Column(type: "json")]
     #[Assert\NotNull(message: "Roles should not be null.")]
     #[Assert\All([
@@ -58,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             message: "Each role must be a string."
         )
     ])]
-    private $roles = [];
+    private array $roles = [];
 
     #[ORM\Column(type: "string", length: 255, unique: true)]
     #[Assert\NotBlank(message: "Email should not be blank.")]
@@ -123,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = self::ROLE_USER;
 
         return array_unique($roles);
     }

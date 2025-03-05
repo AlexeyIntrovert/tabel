@@ -6,3 +6,8 @@ lexik_jwt_authentication:
     public_key: '%kernel.project_dir%/config/jwt/public.pem'
     pass_phrase: 'auth' # Пароль, указанный при генерации ключа
     token_ttl: 3600 # Время жизни токена (в секундах)
+    token_extractors:
+            authorization_header:
+                enabled: true
+                prefix: Bearer
+                name: Authorization

@@ -11,15 +11,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class SignUpController extends AbstractController
 {
     #[Route('/api/signup', name: 'app_signup', methods: ['POST'])]
-    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, JWTTokenManagerInterface $JWTManager, UserProviderInterface $userProvider, ValidatorInterface $validator): Response
-    {
+    public function index(
+        Request $request, 
+        EntityManagerInterface $entityManager, 
+        UserPasswordHasherInterface $passwordHasher, 
+        JWTTokenManagerInterface $JWTManager,
+        ValidatorInterface $validator
+    ): Response {
         $data = json_decode($request->getContent(), true);
 
         $constraints = new Assert\Collection([
@@ -42,6 +46,7 @@ final class SignUpController extends AbstractController
         $user->setName($data['username']);
         $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
         $user->setEmail($data['email']);
+        $user->setRoles(['ROLE_USER']); // Set default role
 
         $entityManager->persist($user);
         $entityManager->flush();
