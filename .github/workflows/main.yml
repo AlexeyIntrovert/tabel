@@ -18,12 +18,25 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
-      - name: Build image
-        run: docker build ./web_app/ -t rearius/tabel-web:latest
-      - name: Push image
-        run: |
-          docker login -u rearius p ${{ secrets.DOCKERHUB_TOKEN }}
-          docker push rearius/tabel-web:latest
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push web app
+        uses: docker/build-push-action@v5
+        with:
+          context: ./web_app
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ env.WEBAPP_IMAGE_NAME }}:latest
