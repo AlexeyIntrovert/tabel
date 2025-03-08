@@ -20,18 +20,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Build image
+        run: docker build ./web-app -t rearius/tabel-web:latest
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push WebApp image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./web_app
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.WEBAPP_IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.WEBAPP_IMAGE_NAME }}:${{ github.sha }}
