@@ -24,6 +24,5 @@ jobs:
         run: docker build ./web_app -t rearius/tabel-web:latest
       - name: Push image
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push rearius/tabel-web:latest
 
