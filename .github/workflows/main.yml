@@ -21,5 +21,5 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Build image
-        run: docker build ./web-app -t rearius/tabel-web:latest
+        run: docker build ./web_app -t rearius/tabel-web:latest
 
