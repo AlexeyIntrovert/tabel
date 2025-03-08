@@ -1,4 +1,4 @@
-sname: Docker Hub Publish
+name: Docker Hub Publish
 
 on:
   push:
