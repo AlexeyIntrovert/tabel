@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button routerLink="/profile">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  <span class="spacer"></span>
+  
+  <button mat-button routerLink="/timesheet">Табель</button>
+  <button mat-button routerLink="/calendar">Календарь</button>
+  <button mat-button routerLink="/settings">Настройки</button>
+  
+  <span class="spacer"></span>
+  <button mat-button (click)="signout()">Выход</button>
+</mat-toolbar>

@@ -1,0 +1,27 @@
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+}
+
+.calendar-container {
+  padding: 20px;
+  min-height: 400px;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  
+  td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+}
+
+.day-work { background-color: white; }
+.day-pre-holiday { background-color: #fff3cd; }
+.day-holiday { background-color: #f8d7da; }
+.day-rest { background-color: #d4edda; }

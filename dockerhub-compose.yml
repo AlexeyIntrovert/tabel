@@ -45,10 +45,7 @@ services:
     volumes:
       - ./web_app/app:/app
   backapp:
-    build:
-      context: back_app/
-      dockerfile: Dockerfile
-    image: frankenphp_dev
+    image: rearius/tabel-backend:latest
     restart: unless-stopped
     environment:
       SERVER_NAME: ${SERVER_NAME:-localhost}, php:80

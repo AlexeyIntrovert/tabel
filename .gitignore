@@ -1,4 +1,6 @@
 /web_app/node_modules/*
 /web_app/app/node_modules/*
+/web_app/.angular/*
+/web_app/.vscode/*
 pgadmin/*
 db/*

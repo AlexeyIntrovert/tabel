@@ -1,0 +1,26 @@
+<div class="calendar-container">
+  <div *ngIf="isLoading" class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <h2>Производственный календарь {{ currentYear }}</h2>
+    <table class="calendar-table">
+      <thead>
+        <tr>
+          <th>Месяц</th>
+          <th *ngFor="let day of days">{{ day }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let month of months">
+          <td>{{ month.name }}</td>
+          <td *ngFor="let day of month.days" 
+              [ngClass]="getDayClass(day)">
+            {{ getDayContent(day) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
