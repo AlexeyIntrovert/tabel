@@ -9,6 +9,7 @@ on:
 env:
   REGISTRY: docker.io
   WEBAPP_IMAGE_NAME: rearius/tabel-web
+  BACKEND_IMAGE_NAME: rearius/tabel-backend
 
 jobs:
   build-and-push:
@@ -28,10 +29,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build web app
-        run : |
-          docker build -t rearius/tabel-web:latest ./web_app
+      - name: Build and push WebApp image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./web_app
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.WEBAPP_IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.WEBAPP_IMAGE_NAME }}:${{ github.sha }}
 
-      - name: Push web app
-        run: |
-          docker push rearius/tabel-web:latest
+      - name: Build and push Backend image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./back_app
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }}
