@@ -40,4 +40,4 @@ jobs:
           context: ./web_app
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: tabel_web:latest
+          tags: tabel-web:latest
