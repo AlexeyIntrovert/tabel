@@ -32,7 +32,7 @@ class AuthController extends AbstractController
         return $response;
     }
 
-    #[Route('/auth/check', name: 'auth_check', methods: ['GET'])]
+    #[Route('/api/auth/check', name: 'auth_check', methods: ['GET'])]
     public function authCheck(): JsonResponse
     {
         $this->logger->info('AuthController::auth_check called');

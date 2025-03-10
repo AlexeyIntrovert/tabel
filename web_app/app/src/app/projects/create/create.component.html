@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ data.uid ? 'Edit' : 'Create' }} Project</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Project Name</mat-label>
+    <input matInput [(ngModel)]="data.name" required>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!data.name">
+    {{ data.uid ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

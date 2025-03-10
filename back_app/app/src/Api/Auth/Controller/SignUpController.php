@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class SignUpController extends AbstractController
 {
-    #[Route('/api/signup', name: 'app_signup', methods: ['POST'])]
+    #[Route('/api/auth/signup', name: 'app_signup', methods: ['POST'])]
     public function index(
         Request $request, 
         EntityManagerInterface $entityManager, 

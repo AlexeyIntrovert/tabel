@@ -30,6 +30,12 @@ export const routes: Routes = [
       .then(m => m.SettingsComponent)
   },
   {
+    path: 'projects',
+    canActivate: [authGuard],
+    loadComponent: () => import('./projects/projects.component')
+      .then(m => m.ProjectsComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
+import { tap, catchError, finalize, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 export interface AuthResponse {
@@ -12,26 +12,54 @@ export interface AuthResponse {
   };
 }
 
+export interface User {
+  email: string;
+  roles: string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost/api';
-  private tokenKey = 'jwt_token';
+  private apiUrl = 'http://localhost/api/auth';
+  private readonly tokenKey = 'auth_token';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  private userSubject = new BehaviorSubject<User | null>(null);
+  user$ = this.userSubject.asObservable();
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) {
-    this.checkAuth();
+    const token = this.getToken();
+    this.isAuthenticatedSubject.next(!!token);
+  }
+
+  checkAuth(): void {
+    const token = this.getToken();
+    if (!token) {
+      this.handleUnauthenticated();
+      return;
+    }
+
+    this.verifyToken().subscribe({
+      next: (isAuthenticated) => {
+        if (!isAuthenticated) {
+          this.handleUnauthenticated();
+        }
+      },
+      error: () => {
+        this.handleUnauthenticated();
+      }
+    });
   }
 
   signin(credentials: { email: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/signin`, credentials).pipe(
       tap(response => {
         this.setToken(response.token);
+        this.userSubject.next(response.user);
         this.isAuthenticatedSubject.next(true);
       }),
       catchError(this.handleError)
@@ -50,16 +78,30 @@ export class AuthService {
 
   signout(): void {
     this.removeToken();
+    this.userSubject.next(null);
     this.isAuthenticatedSubject.next(false);
     this.router.navigate(['/signin']);
   }
 
   refreshToken(): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/refresh`, {}).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, {}).pipe(
       tap(response => {
         this.setToken(response.token);
       }),
       catchError(this.handleError)
+    );
+  }
+
+  verifyToken(): Observable<boolean> {
+    return this.http.get<{authenticated: boolean}>(`${this.apiUrl}/check`, {}).pipe(
+      map(response => response.authenticated),
+      tap(isAuthenticated => {
+        this.isAuthenticatedSubject.next(isAuthenticated);
+      }),
+      catchError(error => {
+        this.handleUnauthenticated();
+        return of(false);
+      })
     );
   }
 
@@ -79,23 +121,12 @@ export class AuthService {
     return throwError(() => error);
   }
 
-  checkAuth(): void {
-    const token = this.getToken();
-    if (!token) {
-      this.isAuthenticatedSubject.next(false);
+  private handleUnauthenticated(): void {
+    this.removeToken();
+    this.isAuthenticatedSubject.next(false);
+    if (!window.location.pathname.includes('/signin')) {
       this.router.navigate(['/signin']);
-      return;
     }
-
-    this.http.post(`${this.apiUrl}/auth/check`, {}).pipe(
-      tap(() => {
-        this.isAuthenticatedSubject.next(true);
-      }),
-      catchError(() => {
-        this.signout();
-        return throwError(() => new Error('Authentication failed'));
-      })
-    ).subscribe();
   }
 
 }

@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 
 final class SignInController extends AbstractController
 {
-    #[Route('/api/signin', name: 'app_signin', methods: ['POST'])]
+    #[Route('/api/auth/signin', name: 'app_signin', methods: ['POST'])]
     public function index(
         Request $request, 
         EntityManagerInterface $entityManager, 
@@ -52,10 +52,4 @@ final class SignInController extends AbstractController
         }
     }
 
-    #[Route('/api/check', name: 'app_check', methods: ['GET'])]
-    public function check(Request $request, LoggerInterface $logger): Response
-    {
-        $logger->info('POST request received');
-        return new JsonResponse(['message' => 'check successful']);
-    }
 }

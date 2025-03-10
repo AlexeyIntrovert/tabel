@@ -42,8 +42,8 @@ services:
     image: rearius/tabel-web:latest
     ports:
       - "4200:4200"
-    volumes:
-      - ./web_app/app:/app
+#    volumes:
+#      - ./web_app/app:/app
   backapp:
     image: rearius/tabel-backend:latest
     restart: unless-stopped
