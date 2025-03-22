@@ -36,6 +36,18 @@ export const routes: Routes = [
       .then(m => m.ProjectsComponent)
   },
   {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () => import('./staff/profile/profile.component')
+      .then(m => m.ProfileComponent)
+  },
+  {
+    path: 'timesheet',
+    canActivate: [authGuard],
+    loadComponent: () => import('./timesheet/timesheet.component')
+      .then(m => m.TimesheetComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

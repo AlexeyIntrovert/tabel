@@ -1,0 +1,28 @@
+.timesheet-container {
+  padding: 20px;
+}
+
+.entry-form {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.mat-form-field {
+  min-width: 200px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-actions {
+  width: 100px;
+  text-align: center;
+}
+
+.mat-elevation-z8 {
+  margin-top: 20px;
+}

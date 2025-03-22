@@ -1,1 +1,73 @@
-<p>profile works!</p>
+<div class="profile-container">
+  <mat-card *ngIf="!loading; else loadingTemplate">
+    <mat-card-header>
+      <mat-card-title>Профиль пользователя</mat-card-title>
+      <div class="header-actions">
+        <button mat-button color="primary" (click)="toggleEdit()" *ngIf="!isEditing">
+          <mat-icon>edit</mat-icon>
+          Редактировать
+        </button>
+      </div>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form *ngIf="userProfile" [formGroup]="profileForm" class="profile-form">
+        <mat-form-field class="form-field">
+          <mat-label>Email</mat-label>
+          <input matInput [value]="userProfile.email" disabled>
+        </mat-form-field>
+
+        <mat-form-field class="form-field">
+          <mat-label>ФИО</mat-label>
+          <input matInput formControlName="fullName" [readonly]="!isEditing" [disabled]="!isEditing">
+        </mat-form-field>
+
+        <mat-form-field class="form-field">
+          <mat-label>Табельный номер</mat-label>
+          <input matInput formControlName="tabNum" type="number" [readonly]="!isEditing" [disabled]="!isEditing">
+        </mat-form-field>
+
+        <mat-form-field class="form-field">
+          <mat-label>Должность</mat-label>
+          <input matInput formControlName="position" [readonly]="!isEditing" [disabled]="!isEditing">
+        </mat-form-field>
+
+        <mat-form-field class="form-field">
+          <mat-label>Грейд</mat-label>
+          <input matInput formControlName="grade" type="number" [readonly]="!isEditing" [disabled]="!isEditing">
+        </mat-form-field>
+
+        <mat-form-field class="form-field">
+          <mat-label>Тип производства</mat-label>
+          <mat-select formControlName="productionType" [disabled]="!isEditing">
+            <mat-option *ngFor="let type of productionTypes" [value]="type">
+              {{ type.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="form-field">
+          <mat-label>Группа</mat-label>
+          <mat-select formControlName="group" [disabled]="!isEditing">
+            <mat-option *ngFor="let group of groups" [value]="group">
+              {{ group.name }} ({{ group.code }})
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="form-actions" *ngIf="isEditing">
+          <button mat-button (click)="cancelEdit()">Отмена</button>
+          <button mat-raised-button color="primary" (click)="saveProfile()" [disabled]="!profileForm.valid || !profileForm.dirty">
+            Сохранить
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<ng-template #loadingTemplate>
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+</ng-template>

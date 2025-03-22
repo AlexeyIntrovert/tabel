@@ -41,9 +41,11 @@ export class ProjectsComponent implements OnInit {
   }
 
   openDialog(project?: Project): void {
+    const dialogData = project ? { ...project, name: project.name } : { name: '' };
+    
     const dialogRef = this.dialog.open(ProjectCreateComponent, {
       width: '400px',
-      data: project || { name: '' }
+      data: dialogData
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -53,6 +55,9 @@ export class ProjectsComponent implements OnInit {
         } else {
           this.createProject(result.name);
         }
+      } else {
+        // If dialog was cancelled, reload projects to reset any changes
+        this.loadProjects();
       }
     });
   }

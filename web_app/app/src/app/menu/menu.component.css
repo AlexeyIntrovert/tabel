@@ -2,8 +2,20 @@
   flex: 1 1 auto;
 }
 
+.user-email {
+  margin-left: 16px;
+  font-size: 14px;
+  color: #1a1b1f;
+}
+
 mat-toolbar {
+  display: flex;
+  align-items: center;
   position: fixed;
   top: 0;
   z-index: 1000;
+}
+
+button {
+  margin: 0 4px;
 }

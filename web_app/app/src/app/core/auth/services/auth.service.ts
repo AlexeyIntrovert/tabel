@@ -23,17 +23,28 @@ export interface User {
 export class AuthService {
   private apiUrl = 'http://localhost/api/auth';
   private readonly tokenKey = 'auth_token';
+  private readonly userKey = 'user_data';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   private userSubject = new BehaviorSubject<User | null>(null);
+  
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   user$ = this.userSubject.asObservable();
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) {
+    this.loadStoredData();
+  }
+
+  private loadStoredData(): void {
     const token = this.getToken();
-    this.isAuthenticatedSubject.next(!!token);
+    const userData = this.getStoredUser();
+    
+    if (token && userData) {
+      this.isAuthenticatedSubject.next(true);
+      this.userSubject.next(userData);
+    }
   }
 
   checkAuth(): void {
@@ -49,9 +60,7 @@ export class AuthService {
           this.handleUnauthenticated();
         }
       },
-      error: () => {
-        this.handleUnauthenticated();
-      }
+      error: () => this.handleUnauthenticated()
     });
   }
 
@@ -59,8 +68,9 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/signin`, credentials).pipe(
       tap(response => {
         this.setToken(response.token);
-        this.userSubject.next(response.user);
+        this.setUser(response.user);
         this.isAuthenticatedSubject.next(true);
+        this.userSubject.next(response.user);
       }),
       catchError(this.handleError)
     );
@@ -77,10 +87,7 @@ export class AuthService {
   }
 
   signout(): void {
-    this.removeToken();
-    this.userSubject.next(null);
-    this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/signin']);
+    this.handleUnauthenticated();
   }
 
   refreshToken(): Observable<AuthResponse> {
@@ -109,12 +116,30 @@ export class AuthService {
     localStorage.setItem(this.tokenKey, token);
   }
 
-  getToken(): string | null {
+  public getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
 
   private removeToken(): void {
     localStorage.removeItem(this.tokenKey);
+  }
+
+  private getStoredUser(): User | null {
+    const userData = localStorage.getItem(this.userKey);
+    return userData ? JSON.parse(userData) : null;
+  }
+
+  private setUser(user: User): void {
+    localStorage.setItem(this.userKey, JSON.stringify(user));
+  }
+
+  private removeUser(): void {
+    localStorage.removeItem(this.userKey);
+  }
+
+  hasRole(role: string): boolean {
+    const user = this.userSubject.value;
+    return user?.roles?.includes(role) || false;
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -123,7 +148,9 @@ export class AuthService {
 
   private handleUnauthenticated(): void {
     this.removeToken();
+    this.removeUser();
     this.isAuthenticatedSubject.next(false);
+    this.userSubject.next(null);
     if (!window.location.pathname.includes('/signin')) {
       this.router.navigate(['/signin']);
     }

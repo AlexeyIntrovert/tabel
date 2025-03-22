@@ -12,8 +12,7 @@
   <button mat-button routerLink="/timesheet">Табель</button>
   <button mat-button routerLink="/calendar">Календарь</button>
   <button mat-button routerLink="/settings">Настройки</button>
-  <button *ngIf="(authService.user$ | async)?.roles?.includes('ROLE_MANAGER') || 
-                 (authService.user$ | async)?.roles?.includes('ROLE_HEADER')" 
+  <button *ngIf="authService.hasRole('ROLE_MANAGER') || authService.hasRole('ROLE_HEADER')" 
           mat-button routerLink="/projects">
     Проекты
   </button>

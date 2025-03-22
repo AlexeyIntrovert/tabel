@@ -1,0 +1,81 @@
+<div class="timesheet-container">
+  <form [formGroup]="entryForm" (ngSubmit)="onSubmit()" class="entry-form">
+    <mat-form-field>
+      <mat-label>Дата</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Часы</mat-label>
+      <input matInput type="number" formControlName="hours" min="0" max="24">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Проект</mat-label>
+      <mat-select formControlName="projectId">
+        <mat-option *ngFor="let project of projects" [value]="project.id">
+          {{ project.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="entryForm.get('projectId')?.hasError('required')">
+        Выберите проект
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Группа</mat-label>
+      <mat-select formControlName="groupId">
+        <mat-option *ngFor="let group of groups" [value]="group.id">
+          {{ group.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="entryForm.get('groupId')?.hasError('required')">
+        Выберите группу
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!entryForm.valid">
+      {{ isEditing ? 'Обновить' : 'Добавить' }}
+    </button>
+    <button *ngIf="isEditing" mat-button type="button" (click)="resetForm()">Отмена</button>
+  </form>
+
+  <table mat-table [dataSource]="entries" class="mat-elevation-z8">
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Дата</th>
+      <td mat-cell *matCellDef="let entry">{{entry.date | date}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="hours">
+      <th mat-header-cell *matHeaderCellDef>Часы</th>
+      <td mat-cell *matCellDef="let entry">{{entry.hours}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="project">
+      <th mat-header-cell *matHeaderCellDef>Проект</th>
+      <td mat-cell *matCellDef="let entry">{{ getProjectName(entry.projectId) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="group">
+      <th mat-header-cell *matHeaderCellDef>Группа</th>
+      <td mat-cell *matCellDef="let entry">{{ getGroupName(entry.groupId) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Действия</th>
+      <td mat-cell *matCellDef="let entry">
+        <button mat-icon-button color="primary" (click)="editEntry(entry)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteEntry(entry.id!)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

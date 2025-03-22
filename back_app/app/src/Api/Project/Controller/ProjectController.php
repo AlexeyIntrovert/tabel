@@ -54,6 +54,7 @@ class ProjectController extends AbstractController
         $project = $this->projectService->createProject($data['name']);
 
         return new JsonResponse([
+            'id' => $project->getId(),
             'uid' => $project->getUid(),
             'name' => $project->getName()
         ], Response::HTTP_CREATED);
@@ -92,6 +93,7 @@ class ProjectController extends AbstractController
         }
 
         return new JsonResponse([
+            'id' => $project->getId(),
             'uid' => $project->getUid(),
             'name' => $project->getName()
         ]);
@@ -146,6 +148,7 @@ class ProjectController extends AbstractController
         
         $response = array_map(function($project) {
             return [
+                'id' => $project->getId(),
                 'uid' => $project->getUid(),
                 'name' => $project->getName()
             ];

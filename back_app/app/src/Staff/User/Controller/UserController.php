@@ -3,6 +3,8 @@
 namespace App\Staff\User\Controller;
 
 use App\Staff\Entity\User;
+use App\Staff\User\Entity\ProductionType;
+use App\Staff\User\Entity\Group;
 use App\Staff\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -168,38 +170,65 @@ class UserController extends AbstractController
         }
 
         return new JsonResponse([
+            'email' => $user->getEmail(),
             'fullName' => $user->getFullName(),
             'tabNum' => $user->getTabNum(),
-            'grKod' => $user->getGrKod(),
-            'productionType' => $user->getProductionType(),
-            'position' => $user->getPosition(),
-            'grade' => $user->getGrade()
+            'grade' => $user->getGrade(),
+            'productionType' => $user->getProductionType()?->getId(),
+            'position' => $user->getPosition()?->getId(),
+            'group' => $user->getGroup()?->getId()
         ]);
     }
 
     #[Route('/api/profile', name: 'update_user_profile', methods: ['PUT'])]
-    public function updateUserProfile(Request $request): JsonResponse
-    {
+    public function updateUserProfile(
+        Request $request, 
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
         $user = $this->getUser();
         $data = json_decode($request->getContent(), true);
 
         if (isset($data['fullName'])) {
             $user->setFullName($data['fullName']);
         }
-        if (isset($data['position'])) {
-            $user->setPosition($data['position']);
+        if (isset($data['tabNum'])) {
+            $user->setTabNum($data['tabNum']);
         }
         if (isset($data['grade'])) {
             $user->setGrade($data['grade']);
         }
+        
+        // Handle production type by ID
         if (isset($data['productionType'])) {
-            $user->setProductionType($data['productionType']);
+            $productionType = $entityManager
+                ->getRepository(ProductionType::class)
+                ->find($data['productionType']);
+                
+            if ($productionType) {
+                $user->setProductionType($productionType);
+            }
+        }
+        
+        // Handle group by ID
+        if (isset($data['group'])) {
+            $group = $entityManager
+                ->getRepository(Group::class)
+                ->find($data['group']);
+                
+            if ($group) {
+                $user->setGroup($group);
+            }
         }
 
-        $this->entityManager->flush();
-
-        return new JsonResponse([
-            'message' => 'Profile updated successfully'
-        ]);
+        try {
+            $entityManager->flush();
+            return new JsonResponse([
+                'message' => 'Profile updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'error' => 'Failed to update profile'
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }
